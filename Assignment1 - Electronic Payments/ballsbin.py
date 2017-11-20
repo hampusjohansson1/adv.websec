@@ -29,34 +29,40 @@ def getCoin(u,k,c):
 u=16;
 k=2;
 c=1;
-confidence = 22 // 2;
+confidence = 22 / 2;
 sumIterations = 0;
 simulations = 0;
 meanVal = 0;
 values = [];
-
-iterations = getCoin(u,k,c);
-
+firsttime = True;
+iterations = 0
 newconf = confidence +1;
 
 while newconf > confidence:
-    print("newconf: ");
-    print(newconf);
+     if firsttime is True:
+         for x in range(0, 10):
+             iterations = getCoin(u,k,c);
+             simulations = simulations + 1;
+             sumIterations = iterations + sumIterations;
+             meanVal = sumIterations / simulations;
+             values.append(meanVal);
+           
+     deviation = 0;
+     iterations = getCoin(u,k,c);
     
-    deviation = 0;
-    iterations = getCoin(u,k,c);
+     sumIterations = iterations + sumIterations;
+     simulations = simulations + 1;
     
-    sumIterations = iterations + sumIterations;
-    simulations = simulations + 1;
+     meanVal = sumIterations / simulations;
+     values.append(meanVal);
     
-    meanVal = sumIterations / simulations;
+     for val in values:
+         deviation += ((val - meanVal) ** 2);
     
-    values.append(meanVal);
+     standarddeviation = math.sqrt((deviation / simulations));
     
-    for val in values:
-        deviation += ((meanVal - val) ** 2);
-    
-    deviation = math.sqrt(deviation // simulations);    
-    newconf = meanVal + 3.66*(deviation // math.sqrt(sumIterations));
+     newconf = 3.66*(standarddeviation / math.sqrt(simulations));
+     print(newconf);
+     firsttime = False;
     
 print(meanVal);

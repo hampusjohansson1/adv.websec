@@ -26,10 +26,10 @@ def getCoin(u,k,c):
         
     return iterations;
 
-u=16;
+u=20;
 k=2;
-c=1;
-confidence = 22 / 2;
+c=10000;
+confidence = 182 / 2;
 sumIterations = 0;
 simulations = 0;
 meanVal = 0;
@@ -62,7 +62,6 @@ while newconf > confidence:
      standarddeviation = math.sqrt((deviation / simulations));
     
      newconf = 3.66*(standarddeviation / math.sqrt(simulations));
-     print(newconf);
      firsttime = False;
     
 print(meanVal);

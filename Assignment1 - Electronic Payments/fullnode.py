@@ -20,14 +20,14 @@ def createTree(currentList,returnArray,index):
      for i, leaf in enumerate(currentList):
         if i % 2 is 0:
              leftNode=leaf;
-             if i is index:
-                 index = index // 2;
+             if i == index:
+                 index = index / 2;
                  returnArray.append("R" + currentList[i+1]);
                  
         elif i % 2 != 0:
              rightNode = leaf;
-             if i is index:
-                 index = (index - 1) // 2;
+             if i == index:
+                 index = (index - 1) / 2
                  returnArray.append("L" + currentList[i-1]);
         
         if leftNode != None and rightNode != None:

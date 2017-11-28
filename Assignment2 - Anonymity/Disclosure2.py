@@ -5,8 +5,7 @@ import operator;
 def exclusion(learnList,badguysets):
     for badset in badguysets:
         before = False;
-        allone = False;
-        templearn = learnList;
+        templearn = learnList.copy();
         
         for i,learnSet in enumerate(learnList):
             if len(badset.intersection(learnSet)) > 0 and before == False:
@@ -94,7 +93,7 @@ print(len(badguysets));
 learnList = learn(badguysets,partners);
 print(len(learnList));
 
-print("Partners");
+print("Partners:");
 partnerlist = exclusion(learnList,badguysets);
 print(partnerlist);
 

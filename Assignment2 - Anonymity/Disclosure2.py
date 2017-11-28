@@ -5,72 +5,69 @@ import operator;
 def exclusion(learnList,badguysets):
     for badset in badguysets:
         before = False;
+        allone = False;
         templearn = learnList;
         
-        for i,myset in enumerate(learnList):
-            if len(badset.intersection(myset)) > 0 and before == False:
-                templearn[i] = badset.intersection(myset);
+        for i,learnSet in enumerate(learnList):
+            if len(badset.intersection(learnSet)) > 0 and before == False:
+                templearn[i] = badset.intersection(learnSet);
                 before = True;
-            elif len(badset.intersection(myset)) > 0:
+            elif len(badset.intersection(learnSet)) > 0:
                 before = False;
                 break;
         
         if before == True:
-            learnList = templearn;
+            learnList = templearn.copy();
             
-    return learnList;
-
-def learn(partners,list):
-    learnList = [];
-    tempCand = list.pop();
-    learnList.append(tempCand);
-    intersect = False;
-    
-    while len(learnList) < partners:
-        candidate = list.pop();
-        intersect = False;
-
-        for myset in learnList:
-            if len(myset.intersection(candidate)) > 0:
-                intersect = True;
-            
-        if(intersect == False):
-            learnList.append(candidate.copy());
-            candidate.clear();
-        
-        if(len(learnList) >= partners):
-                return learnList;
-        
     return learnList;
 
 def extractSets(mixIP,badIP,file):
+    tempSet = set();
+    returnList = [];
     badSent = False;
     nextPack = 0;
-    tempSet = set();
-    setList = [];
     
     for i,pkt in enumerate(file.packets):
         ip_src = pkt.packet.payload.src.decode('UTF8')
         ip_dst = pkt.packet.payload.dst.decode('UTF8')
         
-        if(ip_src == badIP):
-            badSent = True;
-            
         if(i == (len(file.packets)-1)):
             nextPack = None;
         else:
             nextPack = file.packets[i+1].packet.payload.src.decode('UTF8');
+        
+        if(ip_src == badIP):
+            badSent = True;
             
-        if(badSent and ip_src == mixIP):
+        if badSent == True and ip_src == mixIP:
             tempSet.add(ip_dst);
-            
-            if (nextPack != mixIP or nextPack == None):              
-                badSent = False;
-                tempcopy = tempSet.copy();
-                setList.append(tempcopy);
+            if (nextPack != mixIP or nextPack == None):
+                returnList.append(tempSet.copy());
                 tempSet.clear();
-            
-    return setList;
+                badSent = False;
+                    
+    return returnList;
+
+def learn(badlist,partners):
+    learnList = [];
+    
+    for badset in badlist:
+        intersect = False;
+        if(len(learnList) == 0):
+                learnList.append(badset.copy());
+        else:
+            for myset in learnList:
+                if len(myset.intersection(badset)) > 0:
+                     intersect = True;
+                     break;
+                        
+            if(intersect == False):
+                learnList.append(badset);
+                   
+            if(len(learnList) >= partners):
+                return learnList;
+
+    return learnList;
     
 def extractSum(partnerlist):
     sum = 0;
@@ -94,8 +91,8 @@ partners = 12;
 badguysets = extractSets(mixIP,badIP,capfile);
 print(len(badguysets));
 
-learnList = learn(partners,badguysets);
-#print(learnList);
+learnList = learn(badguysets,partners);
+print(len(learnList));
 
 print("Partners");
 partnerlist = exclusion(learnList,badguysets);

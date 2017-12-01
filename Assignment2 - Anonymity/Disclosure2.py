@@ -83,9 +83,9 @@ capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
 #mixIP = "94.147.150.188";
 #badIP = "159.237.13.37";
-badIP = "161.53.13.37";
-mixIP = "11.192.206.171";
-partners = 12;
+badIP = "245.221.13.37";
+mixIP = "15.24.22.93";
+partners = 9;
 
 badguysets = extractSets(mixIP,badIP,capfile);
 print(len(badguysets));

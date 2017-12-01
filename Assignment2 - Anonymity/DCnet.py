@@ -25,11 +25,11 @@ def getAnswer(SA,SB,DA,DB,M,b):
 
     return "Nothing to return";
 
-SA = 0xBF0D;
-SB = 0x3C99;
-DA = 0x186F;
-DB = 0x2EAD;
-M = 0x62AB;
+SA = 0x0E53;
+SB = 0xA248;
+DA = 0x1C67;
+DB = 0xB07C;
+M = 0x7618;
 b = 0;
 
 #SA = 0x27C2;
@@ -39,7 +39,7 @@ b = 0;
 #M = 0x27BC;
 
 answer = getAnswer(SA,SB,DA,DB,M,b);   
-
+print("Answer:")
 print(answer);
 
 

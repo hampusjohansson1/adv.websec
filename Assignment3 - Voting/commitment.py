@@ -1,22 +1,23 @@
 import random;
 import hashlib
-
+import binascii;
 
 def runBindSim(text):
-    for x in range(1,4):
+    for x in range(1,17):
         totalcount = 0;
         average = 0;
-        hash = hashlib.md5(text.encode("UTF-8")).hexdigest()[:x];
-        for i in range (1,12):
+        hexhash = hashlib.md5(text.encode()).hexdigest();
+        hash = bin(int(hexhash, 16))[2:].zfill(128);
+        hash = hash[:x];
+
+        for i in range (1,100):
             tempCount = findBinding(hash,x);
             totalcount = totalcount + tempCount;
-            average = totalcount / i;
-            print(average);
+            average = totalcount // i;
 
-        print("average for " + str(x) + ": ");
-        print(average);
-
-
+        print("average for x = " + str(x) + ": ");
+        print(average)
+        print("probability of breaking the binding property = " + str(x / average));
 
 def findBinding(hash,x):
     k = str(random.getrandbits(16));
@@ -27,7 +28,9 @@ def findBinding(hash,x):
 
     while(hash != guess):
         text = v + k;
-        guess = hashlib.md5(text.encode("UTF-8")).hexdigest()[:x];
+        hexhash = hashlib.md5(text.encode()).hexdigest();
+        guess = bin(int(hexhash, 16))[2:].zfill(128);
+        guess = guess[:x];
 
         counter = counter + 1;
 
@@ -40,8 +43,12 @@ k = str(random.getrandbits(16));
 v = "1";
 
 text = v + k;
-#hash = hashlib.md5(text.encode("UTF-8")).hexdigest()[:4];
 runBindSim(text);
 
-#a  = findBinding(hash,4);
+
+
+#hexhash = hashlib.md5(text.encode()).hexdigest();
+#hash = bin(int(hexhash, 16))[2:].zfill(128);
+#print(hash);
+#a  = findBinding(hash,x);
 #print(a);

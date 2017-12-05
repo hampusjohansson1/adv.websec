@@ -31,9 +31,9 @@ def runBindSim(text,vote):
 def runConcSim(text,vote):
     simArray =  [];
     simArray += [(0,0)];
-    numSim = 100;
+    numSim = 5;
 
-    for x in range (0,32):
+    for x in range (0,129):
         totalcount = 0;
         average = 0;
         hexhash = hashlib.md5(text.encode()).hexdigest();
@@ -48,7 +48,7 @@ def runConcSim(text,vote):
         average = totalcount / numSim;
         print(average);
 
-        print("probability of breaking the concealing property = " + str(numSim/totalcount));
+        #print("probability of breaking the concealing property = " + str(numSim/totalcount));
         simArray += [(x,numSim/totalcount)];
 
     return simArray;
@@ -98,14 +98,14 @@ k = str(random.getrandbits(16));
 vote = 1;
 text = str(vote) + k;
 
-bindSim = runBindSim(text,vote);
-print(bindSim);
+#bindSim = runBindSim(text,vote);
+#print(bindSim);
 
-#conSim = runConcSim(text, vote);
-#print(conSim);
+conSim = runConcSim(text, vote);
+print(conSim);
+plt.plot(conSim,'ro');
 
-#plt.plot(conSim,'ro');
-plt.plot(bindSim,'bo');
+#plt.plot(bindSim,'bo');
 
-plt.axis([0, 33, 0, 0.01]);
+plt.axis([0, 129, 0, 0.01]);
 plt.show();

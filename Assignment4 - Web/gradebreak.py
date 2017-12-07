@@ -1,8 +1,7 @@
 import requests;
 import warnings;
-import operator;
-import urllib
 import time
+
 
 
 def findTime(address,signature,name,grade):
@@ -12,15 +11,20 @@ def findTime(address,signature,name,grade):
     for x in range(0, 10):
         temp = dict();
         for hex in hexArray:
-            params = {'name': name, 'grade': grade, "signature": (signature + hex).encode("utf-8")};
+            params = {'name': name, 'grade': grade, "signature": signature + hex};
 
             start = time.time();
             response = requests.get(address,params,verify=False);
+            #content = urllib2.urlopen(some_url).read()
+
             elapsedTime = time.time() - start;
-            #print(hex + ": " + str(elapsedTime) + " | " + response.url);
             temp[hex] = elapsedTime;
 
+
         win = max(temp, key=temp.get);
+
+        print(win);
+        print(temp);
 
         if(not winner.keys().__contains__(win)):
             winner[win] = 0;

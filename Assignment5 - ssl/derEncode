@@ -1,0 +1,82 @@
+import base64;
+
+def padding(hex_val):
+    if int(hex_val, 16) > 7:
+        return True;
+    else:
+        return False;
+
+def shortDef(hexStr):
+    length = hex(int(len(hexStr) // 2));
+    newlen = length.replace("0x","")
+
+    return newlen
+
+def longDef(hexStr):
+    length = hex(int(len(hexStr) // 2));
+    newlen = length.replace("0x","");
+
+    if(len(hexStr) >= 508):
+        return "82" + newlen
+
+    else:
+        return "81" + newlen
+
+def encode(integer,t = "02"):
+    v = hex(integer)[2:];
+
+    if padding(v[0:1]):
+        v = "00" + v;
+
+    if len(v) <= 254:
+        l =shortDef(v);
+    else:
+        l = longDef(v);
+
+    return t + l + v;
+
+def egcd(a, b):
+	x,y, u,v = 0,1, 1,0
+	while a != 0:
+		q, r = b//a, b%a
+		m, n = x-u*q, y-v*q
+		b,a, x,y, u,v = a,r, u,v, m,n
+	return b, x, y
+
+def modinv(a, m):
+	g, x, y = egcd(a, m)
+	if g != 1:
+		return None
+	else:
+		return x % m
+
+
+def createRSA(p,q,e):
+    phi = (p-1)*(q-1);
+
+    n = p * q;
+    d = modinv(e,phi);
+    coefficient = modinv(q,p);
+
+    exponent1 = d % (p - 1);
+    exponent2 = d % (q - 1);
+
+    version = 0;
+
+    rsa = encode(version) + encode(n) + encode(e) + encode(d) \
+          + encode(p) + encode(q) + encode(exponent1) + encode(exponent2) + encode(coefficient);
+
+    RSAder = encode(int(rsa,16),"30");
+    print(RSAder);
+
+    base64rsa = base64.b64encode(bytes.fromhex(RSAder));
+
+    return base64rsa.decode("utf-8");
+
+p = 139721121696950524826588106850589277149201407609721772094240512732263435522747938311240453050931930261483801083660740974606647762343797901776568952627044034430252415109426271529273025919247232149498325412099418785867055970264559033471714066901728022294156913563009971882292507967574638004022912842160046962763;
+q = 141482624370070397331659016840167171669762175617573550670131965177212458081250216130985545188965601581445995499595853199665045326236858265192627970970480636850683227427420000655754305398076045013588894161738893242561531526805416653594689480170103763171879023351810966896841177322118521251310975456956247827719;
+e = 65537;
+
+key = createRSA(p,q,e);
+print(key);
+

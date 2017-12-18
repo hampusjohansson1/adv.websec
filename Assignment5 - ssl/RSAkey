@@ -1,0 +1,17 @@
+import base64;
+from Crypto.PublicKey import RSA;
+
+f = open('privatekey.pem', 'r');
+r = RSA.importKey(f.read(),passphrase='')
+
+n = (r.p * r.q);
+
+cipher = "Gpx2jBop0gdwO3kuryGGN9QCBiIcirpTuqn+V6SG7y4xtwB6TEhnGLvH54bQVcXNUN9il60J+FLW" \
+         "QQhJuoclourBIDqeLGQHfsUj4ty3q9NHfxtogXvmq0LPZvKWLj6fa+NFz0EzEhFO+/5N4UU/cucBJuvzxI4Y4nJZVU0cMsg=";
+
+cip = base64.b64decode(cipher);
+tup = (n, r.e , r.d);
+newkey = RSA.construct(tup);
+
+decrypt = newkey.decrypt(cip);
+print(decrypt);

@@ -1,8 +1,0 @@
-openssl cms -decrypt -in mail1.msg -out out1.txt -inkey keyreceiver.pem
-openssl cms -digest_verify -in out1.txt
-
-openssl cms -decrypt -in mail1.msg -out out2.txt -inkey keyreceiver.pem
-openssl cms -digest_verify -in out3.txt
-
-openssl cms -decrypt -in mail1.msg -out out3.txt -inkey keyreceiver.pem
-openssl cms -digest_verify -in out3.txt
